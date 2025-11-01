@@ -83,7 +83,24 @@ func (r *Runner) RunEnumeration() error {
 func (r *Runner) RunEnumerationWithCtx(ctx context.Context) error {
 	outputs := []io.Writer{r.options.Output}
 
+	// Handle single domain with file output
 	if len(r.options.Domain) > 0 {
+		// If output file is specified, create it and add to outputs
+		if r.options.OutputFile != "" {
+			outputWriter := NewOutputWriter(r.options.JSON)
+			file, err := outputWriter.createFile(r.options.OutputFile, false)
+			if err != nil {
+				gologger.Error().Msgf("Could not create file %s: %s\n", r.options.OutputFile, err)
+				return err
+			}
+			defer func() {
+				if closeErr := file.Close(); closeErr != nil {
+					gologger.Error().Msgf("Error closing file %s: %s", r.options.OutputFile, closeErr)
+				}
+			}()
+			outputs = append(outputs, file)
+		}
+		
 		domainsReader := strings.NewReader(strings.Join(r.options.Domain, "\n"))
 		return r.EnumerateMultipleDomainsWithCtx(ctx, domainsReader, outputs)
 	}
@@ -129,23 +146,8 @@ func (r *Runner) EnumerateMultipleDomainsWithCtx(ctx context.Context, reader io.
 		}
 
 		var file *os.File
-		// If the user has specified an output file, use that output file instead
-		// of creating a new output file for each domain. Else create a new file
-		// for each domain in the directory.
-		if r.options.OutputFile != "" {
-			outputWriter := NewOutputWriter(r.options.JSON)
-			file, err = outputWriter.createFile(r.options.OutputFile, true)
-			if err != nil {
-				gologger.Error().Msgf("Could not create file %s for %s: %s\n", r.options.OutputFile, r.options.Domain, err)
-				return err
-			}
-
-			_, err = r.EnumerateSingleDomainWithCtx(ctx, domain, append(writers, file))
-
-			if closeErr := file.Close(); closeErr != nil {
-				gologger.Error().Msgf("Error closing file %s: %s", r.options.OutputFile, closeErr)
-			}
-		} else if r.options.OutputDirectory != "" {
+		// If the user has specified an output directory, create a separate file for each domain
+		if r.options.OutputDirectory != "" {
 			outputFile := path.Join(r.options.OutputDirectory, domain)
 			if r.options.JSON {
 				outputFile += ".json"
