@@ -1,0 +1,72 @@
+# 🌪️ Stormfinder Configuration Template
+# Copy this file to ~/.config/stormfinder/config.yaml and customize
+
+# 🎯 Basic Settings
+threads: 25                    # Number of concurrent threads
+timeout: 30                    # Request timeout in seconds
+max-time: 10                   # Maximum enumeration time in minutes
+
+# ⚡ Performance Settings
+cache: true                    # Enable intelligent caching
+cache-ttl: 24                  # Cache TTL in hours
+cache-dir: ""                  # Custom cache directory (empty = default)
+optimize-speed: false          # Optimize for speed over memory
+optimize-memory: false         # Optimize for memory over speed
+max-memory: 512                # Maximum memory usage in MB
+
+# 🔍 Enumeration Settings
+brute-force: false             # Enable DNS brute force by default
+permutations: false            # Enable subdomain permutations by default
+recursive: false               # Enable recursive enumeration by default
+max-depth: 3                   # Maximum recursion depth
+brute-threads: 25              # Brute force thread count
+min-length: 3                  # Minimum word length for permutations
+max-length: 25                 # Maximum word length for permutations
+
+# 🤖 AI Settings
+ai-enabled: false              # Enable AI predictions by default
+ai-max-predictions: 100        # Maximum AI predictions to generate
+ai-confidence-threshold: 0.6   # Minimum confidence threshold (0.0-1.0)
+
+# 🔐 Advanced CT Mining
+advanced-ct: false             # Enable advanced CT mining by default
+ct-timerange: "30d"            # CT log time range (30d, 90d, 1y)
+ct-servers: []                 # Custom CT log servers (empty = default)
+
+# 📱 Social Media Mining
+social-mining: false           # Enable social mining by default
+social-platforms:              # Platforms to mine
+  - "github"
+  - "gitlab"
+
+# 🗺️ Relationship Mapping
+generate-map: false            # Generate relationship maps by default
+map-format: "json"             # Map output format (json, graphviz, html)
+map-visualization: false       # Generate visual maps
+
+# 📡 Real-time Monitoring
+monitor-mode: false            # Enable monitoring mode by default
+monitor-interval: "5m"         # Monitoring check interval
+alert-threshold: 5             # Alert threshold for new subdomains
+
+# 📊 Output Settings
+json-output: false             # JSON output by default
+collect-sources: false         # Include source attribution
+silent: false                  # Silent mode by default
+verbose: false                 # Verbose mode by default
+no-color: false                # Disable colors by default
+
+# 🌐 Network Settings
+rate-limit: 0                  # Global rate limit (0 = no limit)
+proxy: ""                      # HTTP proxy URL
+resolvers: []                  # Custom DNS resolvers (empty = default)
+exclude-ip: false              # Exclude IP addresses from results
+
+# 📁 File Settings
+wordlist: ""                   # Custom wordlist file path
+output-dir: ""                 # Output directory for multiple domains
+provider-config: ""            # Custom provider config path
+
+# 🎨 Display Settings
+show-statistics: false         # Show source statistics by default
+list-sources: false            # List available sources and exit

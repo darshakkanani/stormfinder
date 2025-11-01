@@ -1,0 +1,47 @@
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Build artifacts
+stormfinder
+cmd/stormfinder/stormfinder
+dist/
+build/
+bin/
+
+# Go specific
+vendor/
+*.test
+*.out
+coverage.txt
+coverage.html
+
+# IDE files
+.idea/
+.vscode/
+.devcontainer/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.log
+*.bak
+
+# Configuration files with secrets
+provider-config.yaml
+config.yaml
+
+# Output files
+results.txt
+results.json
+output.txt
+output.json
+scan-*.txt
+scan-*.json
