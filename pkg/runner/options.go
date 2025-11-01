@@ -130,37 +130,22 @@ func ParseOptions() *Options {
 	var err error
 	flagSet := goflags.NewFlagSet()
 	flagSet.SetDescription(`
-🌪️  STORMFINDER - Next-Generation AI-Powered Subdomain Discovery Platform
+🌪️ Stormfinder - Fast Subdomain Enumeration Tool
 
-    ╔══════════════════════════════════════════════════════════════════════════════════╗
-    ║  🚀 The Most Advanced Subdomain Enumeration Tool Ever Created                   ║
-    ║  🤖 AI-Powered Predictions | 🔍 46+ Sources | ⚡ 10x-100x More Discoveries    ║
-    ║  📡 Real-time Monitoring | 🗺️ Relationship Mapping | 📱 Social Mining        ║
-    ╚══════════════════════════════════════════════════════════════════════════════════╝
+A powerful subdomain discovery tool that combines multiple enumeration techniques
+to find significantly more subdomains than traditional tools.
 
-    💡 UNIQUE FEATURES:
-       • 🧠 Machine Learning subdomain prediction (INDUSTRY FIRST)
-       • 🔐 Advanced Certificate Transparency mining with timeline analysis
-       • 📱 Social media & code repository intelligence gathering
-       • 🗺️ Visual subdomain relationship mapping and network analysis
-       • 📡 Real-time continuous monitoring with instant alerts
-       • ⚡ 3-5x faster than competitors with intelligent caching
-       • 🎯 22,000+ subdomains discovered vs 200-500 for traditional tools
+Key features:
+• 46+ passive intelligence sources (Certificate Transparency, DNS databases, etc.)
+• DNS brute forcing with intelligent wordlists and wildcard detection
+• Subdomain permutations and mutations for comprehensive coverage
+• Recursive discovery to find subdomains of subdomains
+• Smart caching system for faster repeat scans
+• Social media and code repository scanning
+• Multiple output formats with source attribution
 
-    🎨 BEAUTIFUL INTERFACE:
-       • ✨ Stunning visual progress indicators with emoji logging
-       • 🎯 Professional completion summaries with detailed statistics
-       • 🌟 Modern ASCII art banners highlighting advanced capabilities
-       • 📊 Rich source attribution and effectiveness analytics
-
-    🏆 ENTERPRISE FEATURES:
-       • 🔧 Hierarchical configuration system with smart defaults
-       • 💾 Intelligent result caching for 80% speed improvement
-       • 🚀 Performance optimization modes (speed vs memory)
-       • 🌐 Proxy support and custom DNS resolver configuration
-       • 📦 Multiple output formats (JSON, silent, verbose, visual maps)
-
-    Ready to revolutionize your subdomain discovery? Let's storm the internet! 🌪️✨`)
+Built for bug bounty hunters, penetration testers, and security researchers
+who need comprehensive subdomain enumeration.`)
 
 	flagSet.CreateGroup("input", "🎯 TARGET SPECIFICATION",
 		flagSet.StringSliceVarP(&options.Domain, "domain", "d", nil, "🌐 target domains to discover subdomains for", goflags.NormalizedStringSliceOptions),
@@ -209,70 +194,70 @@ func ParseOptions() *Options {
 	)
 
 	flagSet.CreateGroup("debug", "🔧 DISPLAY & DEBUGGING",
-		flagSet.BoolVar(&options.Silent, "silent", false, "🤫 minimal output (subdomains only, perfect for piping)"),
+		flagSet.BoolVar(&options.Silent, "silent", false, "🤫 minimal output (subdomains only)"),
 		flagSet.BoolVar(&options.Version, "version", false, "ℹ️ show version information and exit"),
-		flagSet.BoolVar(&options.Verbose, "v", false, "📢 detailed progress output with beautiful emoji indicators"),
-		flagSet.BoolVarP(&options.NoColor, "no-color", "nc", false, "⚫ disable colorized output for scripts"),
-		flagSet.BoolVarP(&options.ListSources, "list-sources", "ls", false, "📋 list all 46+ available intelligence sources"),
-		flagSet.BoolVar(&options.Statistics, "stats", false, "📊 detailed source effectiveness statistics"),
+		flagSet.BoolVar(&options.Verbose, "v", false, "📢 detailed progress output"),
+		flagSet.BoolVarP(&options.NoColor, "no-color", "nc", false, "⚫ disable colorized output"),
+		flagSet.BoolVarP(&options.ListSources, "list-sources", "ls", false, "📋 list all available sources"),
+		flagSet.BoolVar(&options.Statistics, "stats", false, "📊 show source statistics"),
 	)
 
 	flagSet.CreateGroup("enhanced", "🚀 ENHANCED DISCOVERY TECHNIQUES",
-		flagSet.BoolVarP(&options.BruteForce, "brute", "b", false, "💥 DNS brute force with intelligent wordlists (10x more discoveries)"),
-		flagSet.BoolVarP(&options.Permutations, "permutations", "p", false, "🔄 smart subdomain mutations and permutations"),
-		flagSet.StringVarP(&options.Wordlist, "wordlist", "w", "", "📝 custom wordlist file for targeted brute force"),
+		flagSet.BoolVarP(&options.BruteForce, "brute", "b", false, "💥 enable DNS brute force with wordlists"),
+		flagSet.BoolVarP(&options.Permutations, "permutations", "p", false, "🔄 generate subdomain permutations and mutations"),
+		flagSet.StringVarP(&options.Wordlist, "wordlist", "w", "", "📝 custom wordlist file for brute force"),
 		flagSet.StringVar(&options.WordlistDir, "wordlist-dir", "", "📁 directory containing multiple wordlist files"),
 		flagSet.StringSliceVarP(&options.WordlistURLs, "wordlist-urls", "", nil, "🌐 URLs to download wordlists from (comma separated)", goflags.NormalizedStringSliceOptions),
-		flagSet.IntVar(&options.BruteThreads, "brute-threads", 25, "⚡ concurrent threads for brute force speed"),
-		flagSet.BoolVar(&options.Recursive, "recursive-enum", false, "🔍 recursive deep enumeration (subdomains of subdomains)"),
-		flagSet.IntVar(&options.MaxDepth, "max-depth", 3, "📏 maximum recursion depth for deep discovery"),
-		flagSet.IntVar(&options.MinWordLength, "min-length", 3, "📐 minimum word length for permutation generation"),
-		flagSet.IntVar(&options.MaxWordLength, "max-length", 25, "📏 maximum word length for permutation generation"),
+		flagSet.IntVar(&options.BruteThreads, "brute-threads", 25, "⚡ concurrent threads for brute force"),
+		flagSet.BoolVar(&options.Recursive, "recursive-enum", false, "🔍 recursive enumeration (find subdomains of subdomains)"),
+		flagSet.IntVar(&options.MaxDepth, "max-depth", 3, "📏 maximum recursion depth"),
+		flagSet.IntVar(&options.MinWordLength, "min-length", 3, "📐 minimum word length for permutations"),
+		flagSet.IntVar(&options.MaxWordLength, "max-length", 25, "📏 maximum word length for permutations"),
 	)
 
 	flagSet.CreateGroup("performance", "💾 PERFORMANCE & CACHING",
-		flagSet.BoolVar(&options.EnableCache, "cache", false, "⚡ intelligent result caching (80% speed improvement on repeat scans)"),
-		flagSet.StringVar(&options.CacheDir, "cache-dir", "", "📁 custom cache directory for persistent storage"),
-		flagSet.IntVar(&options.CacheTTL, "cache-ttl", 24, "⏰ cache time-to-live in hours (default 24h)"),
-		flagSet.BoolVar(&options.OptimizeSpeed, "optimize-speed", false, "🚀 optimize for maximum speed (uses more memory)"),
-		flagSet.BoolVar(&options.OptimizeMemory, "optimize-memory", false, "🧠 optimize for memory efficiency (slightly slower)"),
-		flagSet.IntVar(&options.MaxMemoryMB, "max-memory", 512, "📊 maximum memory usage limit in MB"),
+		flagSet.BoolVar(&options.EnableCache, "cache", false, "⚡ enable result caching for faster repeat scans"),
+		flagSet.StringVar(&options.CacheDir, "cache-dir", "", "📁 custom cache directory"),
+		flagSet.IntVar(&options.CacheTTL, "cache-ttl", 24, "⏰ cache time-to-live in hours"),
+		flagSet.BoolVar(&options.OptimizeSpeed, "optimize-speed", false, "🚀 optimize for speed (uses more memory)"),
+		flagSet.BoolVar(&options.OptimizeMemory, "optimize-memory", false, "🧠 optimize for memory efficiency"),
+		flagSet.IntVar(&options.MaxMemoryMB, "max-memory", 512, "📊 maximum memory usage in MB"),
 	)
 
-	flagSet.CreateGroup("ai", "🤖 AI-POWERED FEATURES (INDUSTRY FIRST)",
-		flagSet.BoolVar(&options.EnableAI, "ai", false, "🧠 machine learning subdomain prediction (REVOLUTIONARY)"),
-		flagSet.IntVar(&options.AIMaxPredictions, "ai-max", 100, "🔢 maximum AI predictions to generate per domain"),
+	flagSet.CreateGroup("ai", "🤖 AI-POWERED FEATURES (EXPERIMENTAL)",
+		flagSet.BoolVar(&options.EnableAI, "ai", false, "🧠 enable AI subdomain prediction (experimental)"),
+		flagSet.IntVar(&options.AIMaxPredictions, "ai-max", 100, "🔢 maximum AI predictions per domain"),
 		flagSet.StringVar(&options.AIConfidenceMin, "ai-confidence", "0.6", "🎯 minimum AI confidence threshold (0.0-1.0)"),
 	)
 
-	flagSet.CreateGroup("advanced-ct", "🔐 ADVANCED CERTIFICATE TRANSPARENCY MINING",
-		flagSet.BoolVar(&options.AdvancedCT, "advanced-ct", false, "🔍 deep Certificate Transparency analysis with timeline tracking"),
-		flagSet.StringSliceVarP(&options.CTLogServers, "ct-servers", "", nil, "🌐 custom CT log servers for enhanced coverage", goflags.NormalizedStringSliceOptions),
-		flagSet.StringVar(&options.CTTimeRange, "ct-timerange", "30d", "📅 historical CT log time range (30d, 90d, 1y)"),
+	flagSet.CreateGroup("advanced-ct", "🔐 CERTIFICATE TRANSPARENCY MINING",
+		flagSet.BoolVar(&options.AdvancedCT, "advanced-ct", false, "🔍 advanced Certificate Transparency analysis"),
+		flagSet.StringSliceVarP(&options.CTLogServers, "ct-servers", "", nil, "🌐 custom CT log servers", goflags.NormalizedStringSliceOptions),
+		flagSet.StringVar(&options.CTTimeRange, "ct-timerange", "30d", "📅 CT log time range (30d, 90d, 1y)"),
 	)
 
-	flagSet.CreateGroup("social", "📱 SOCIAL MEDIA & CODE REPOSITORY MINING",
-		flagSet.BoolVar(&options.SocialMining, "social", false, "🕵️ intelligence gathering from social platforms and code repos"),
-		flagSet.StringVar(&options.GitHubToken, "github-token", "", "🐱 GitHub API token for repository and configuration mining"),
-		flagSet.StringVar(&options.TwitterToken, "twitter-token", "", "🐦 Twitter API token for social media intelligence"),
-		flagSet.StringSliceVarP(&options.SocialPlatforms, "social-platforms", "", []string{"github", "gitlab"}, "🌐 social platforms to mine (github,gitlab,reddit,etc)", goflags.NormalizedStringSliceOptions),
+	flagSet.CreateGroup("social", "📱 SOCIAL & CODE REPOSITORY MINING",
+		flagSet.BoolVar(&options.SocialMining, "social", false, "🕵️ scan social platforms and code repositories"),
+		flagSet.StringVar(&options.GitHubToken, "github-token", "", "🐱 GitHub API token"),
+		flagSet.StringVar(&options.TwitterToken, "twitter-token", "", "🐦 Twitter API token"),
+		flagSet.StringSliceVarP(&options.SocialPlatforms, "social-platforms", "", []string{"github", "gitlab"}, "🌐 platforms to scan (github,gitlab,reddit,etc)", goflags.NormalizedStringSliceOptions),
 	)
 
-	flagSet.CreateGroup("mapping", "🗺️ RELATIONSHIP MAPPING & VISUALIZATION",
-		flagSet.BoolVar(&options.GenerateMap, "map", false, "🔗 generate subdomain network relationship analysis"),
-		flagSet.StringVar(&options.MapFormat, "map-format", "json", "📊 output format (json, graphviz, html) for relationship data"),
-		flagSet.BoolVar(&options.MapVisualization, "map-visual", false, "🎨 create interactive visual network maps"),
+	flagSet.CreateGroup("mapping", "🗺️ RELATIONSHIP MAPPING",
+		flagSet.BoolVar(&options.GenerateMap, "map", false, "🔗 generate subdomain relationship map"),
+		flagSet.StringVar(&options.MapFormat, "map-format", "json", "📊 map output format (json, graphviz, html)"),
+		flagSet.BoolVar(&options.MapVisualization, "map-visual", false, "🎨 create visual network maps"),
 	)
 
-	flagSet.CreateGroup("monitor", "📡 REAL-TIME MONITORING & ALERTING",
-		flagSet.BoolVar(&options.MonitorMode, "monitor", false, "🔄 continuous real-time subdomain monitoring"),
-		flagSet.DurationVar(&options.MonitorInterval, "monitor-interval", 5*time.Minute, "⏱️ monitoring check interval (e.g., 5m, 1h, 24h)"),
-		flagSet.StringVar(&options.WebhookURL, "webhook", "", "🔔 webhook URL for instant new subdomain alerts"),
+	flagSet.CreateGroup("monitor", "📡 REAL-TIME MONITORING",
+		flagSet.BoolVar(&options.MonitorMode, "monitor", false, "🔄 continuous subdomain monitoring"),
+		flagSet.DurationVar(&options.MonitorInterval, "monitor-interval", 5*time.Minute, "⏱️ monitoring interval (e.g., 5m, 1h, 24h)"),
+		flagSet.StringVar(&options.WebhookURL, "webhook", "", "🔔 webhook URL for alerts"),
 		flagSet.IntVar(&options.AlertThreshold, "alert-threshold", 5, "🚨 minimum new subdomains to trigger alert"),
 	)
 
 	flagSet.CreateGroup("optimization", "⏱️ TIMING & OPTIMIZATION",
-		flagSet.IntVar(&options.Timeout, "timeout", 30, "⏰ request timeout in seconds (balance speed vs reliability)"),
+		flagSet.IntVar(&options.Timeout, "timeout", 30, "⏰ request timeout in seconds"),
 		flagSet.IntVar(&options.MaxEnumerationTime, "max-time", 10, "⏳ maximum enumeration time in minutes (0 = unlimited)"),
 	)
 
