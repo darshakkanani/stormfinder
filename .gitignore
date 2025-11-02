@@ -8,11 +8,10 @@ ehthumbs.db
 Thumbs.db
 
 # Build artifacts
-stormfinder
-cmd/stormfinder/stormfinder
-dist/
-build/
-bin/
+/stormfinder
+/dist/
+/build/
+/bin/
 
 # Go specific
 vendor/
@@ -45,3 +44,6 @@ output.txt
 output.json
 scan-*.txt
 scan-*.json
+
+# Allow main package under cmd/stormfinder to be tracked
+!cmd/stormfinder/**
